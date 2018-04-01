@@ -8,7 +8,7 @@ Process,Close,pythonw.exe
 
 ; Start tracker to run in background
 
-Run, %A_ScriptDir%\tracker.pyw "%A_ScriptDir%\values.txt"
+Run, %A_ScriptDir%\tracker.py "%A_ScriptDir%\values.txt"
 
 ; Get effective screensize to show settings GUI in bottom right corner on start
 
@@ -47,12 +47,12 @@ Loop{
   panicIndex = %trackerValues2%
 
   ControlSetText, Static3, %priceBTC% , LB
-  if panicIndex < 7
+  if panicIndex <= 7
   {
     Gui, Font, cGray
     GuiControl, Font, TextColor
   }
-  if panicIndex > 7 and panicIndex < 14
+  if panicIndex > 7 and panicIndex <= 14
   {
     Gui, Font, c9e622f
     GuiControl, Font, TextColor
