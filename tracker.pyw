@@ -19,22 +19,26 @@ def getFinex(): # Function to get BTCUSDSHORTS and BTCUSDLONGS ticker values fro
 	data = r.json()
 	get_longs = math.floor(data[1])
 
-	return (get_shorts, get_longs)
+	time.sleep(2)
+
+	r = requests.request("GET","https://api.bitfinex.com/v2/ticker/tBTCUSD")
+	data = r.json()
+	price_btc = math.floor(data[0])
+
+	time.sleep(2)
+
+	return (get_shorts, get_longs, price_btc)
 
 # Intitialize variables
 
-total_shorts_last, total_longs_last = getFinex()
+total_shorts_last, total_longs_last, price_btc = getFinex()
 panic_index = 0
-
-# Connect to Binance API
-
-client = Client("", "")
 
 textfile_path = sys.argv[1]
 
 while True:
 	try:
-		total_shorts, total_longs = getFinex()
+		total_shorts, total_longs, price_btc = getFinex()
 	except:
 		continue
 
@@ -58,13 +62,11 @@ while True:
 	total_shorts_last = total_shorts
 	total_longs_last = total_longs
 
-	infoBTC = client.get_ticker(symbol="BTCUSDT")
-	priceBTC = float(infoBTC.get("askPrice"))
-	priceBTC = math.floor(priceBTC)
+	
 	text_file = open(textfile_path, "w")
-	text_file.write(str(priceBTC) + "|" + str(panic_index))
+	text_file.write(str(price_btc) + "|" + str(panic_index))
 	text_file.close()
 
-	print (total_shorts, total_longs, panic_index, priceBTC)
+	print (total_shorts, total_longs, panic_index, price_btc)
 
-	time.sleep(8)
+	time.sleep(4)
